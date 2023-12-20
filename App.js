@@ -1,4 +1,52 @@
-// App.js
+//Implementando Apple Authentication
+import * as AppleAuthentication from 'expo-apple-authentication';
+import { View, StyleSheet } from 'react-native';
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <AppleAuthentication.AppleAuthenticationButton
+        buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+        buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+        cornerRadius={5}
+        style={styles.button}
+        onPress={async () => {
+          try {
+            const credential = await AppleAuthentication.signInAsync({
+              requestedScopes: [
+                AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                AppleAuthentication.AppleAuthenticationScope.EMAIL,
+              ],
+            });
+            // signed in
+          } catch (e) {
+            if (e.code === 'ERR_REQUEST_CANCELED') {
+              // handle that the user canceled the sign-in flow
+            } else {
+              // handle other errors
+            }
+          }
+        }}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    width: 200,
+    height: 44,
+  },
+});
+
+
+
+/* // App.js
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
@@ -10,15 +58,15 @@ export default function App() {
 
   const handleApplePay = async () => {
     try {
-      const { status, response } = await AppleAuthentication.startAsync({
+      const { status, response } = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
         requestedOperation: AppleAuthentication.AppleAuthenticationOperation.LOGIN,
-        requestedPresentationContext: 'app',
-          //AppleAuthentication.AppleAuthenticationPresentationContext.APP,
+        requestedPresentationContext: AppleAuthentication.AppleAuthenticationPresentationContext.PRESENT,
       });
+      
 
       if (status === 'success') {
         // Use a resposta para autenticar o usuário no seu sistema
@@ -36,19 +84,19 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {/* Navegação */}
+      {/* Navegação}
       <Navigation />
 
-      {/* Botão de Pagar com Apple Pay */}
+      {/* Botão de Pagar com Apple Pay}
       <TouchableOpacity onPress={handleApplePay} style={styles.applePayButton}>
         <Text style={styles.applePayButtonText}>Pagar com Apple Pay</Text>
       </TouchableOpacity>
 
-      {/* Conteúdo da Tela de Pagamento */}
+      {/* Conteúdo da Tela de Pagamento}
       {paymentSheetVisible && (
         <View style={styles.paymentSheetContainer}>
           <Text>Detalhes do Cartão e Tela de Pagamento</Text>
-          {/* Adicione outros componentes e lógica necessários aqui */}
+          {/* Adicione outros componentes e lógica necessários aqui}
           <TouchableOpacity onPress={() => setPaymentSheetVisible(false)}>
             <Text>Fechar Tela de Pagamento</Text>
           </TouchableOpacity>
@@ -87,3 +135,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+ */
